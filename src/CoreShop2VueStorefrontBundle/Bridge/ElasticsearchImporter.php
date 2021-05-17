@@ -74,7 +74,7 @@ class ElasticsearchImporter implements ImporterInterface
                     $this->repository->addLanguageCondition($this->list, $this->language);
                 }
                 if($this->repository instanceof DateAwareRepositoryInterface && $this->since !== null) {
-                    $this->list->addDateCondition($this->list, $this->since);
+                    $this->repository->addDateCondition($this->list, $this->since);
                 }
             } else {
                 // TODO: how to do since here?
