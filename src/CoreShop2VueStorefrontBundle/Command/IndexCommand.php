@@ -32,6 +32,7 @@ class IndexCommand extends AbstractCommand
             ->addArgument('type', InputArgument::OPTIONAL, 'Object types to index')
             ->addArgument('language', InputArgument::OPTIONAL, 'Language to index')
             ->setName('vsbridge:index-objects')
+            ->addOption('updated-since', 's', InputOption::VALUE_OPTIONAL, 'Fetch objects updated in the relative timeframe ("5minute", "2hour", "1day", "yesterday" etc)')
             ->setDescription('Indexing objects of given type in vuestorefront');
     }
 
@@ -58,7 +59,24 @@ class IndexCommand extends AbstractCommand
         $language = $input->getArgument('language');
         $type = $input->getArgument('type');
 
-        $importers = $this->importerFactory->create($store, $language, $type);
+        $sinceDatetime = null;
+        if (null !== $since = $input->getOption('updated-since')) {
+            $sinceDatetime = new \Datetime();
+            $sinceDatetime->modify($since);
+            $controlDatetime = new \Datetime();
+
+            if ($sinceDatetime->getTimestamp() === $controlDatetime->getTimestamp()) {
+                $style->error('Invalid since param passed, try something like "-5minute", "-2hour", "-1day", "yesterday"');
+
+                return 1;
+            }
+
+            $style->warning(sprintf('Indexing only updated since: %1$s', $sinceDatetime->format('c')));
+        }
+        
+        $importers = $this->importerFactory->create($store, $language, $type, $sinceDatetime);
+        
+        
         foreach ($importers as $importer) {
             $style->section(sprintf('Importing: %1$s', $importer->describe()));
 
