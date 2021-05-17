@@ -74,9 +74,11 @@ class ElasticsearchImporter implements ImporterInterface
                 if ($this->repository instanceof StoreAwareRepositoryInterface && $this->concreteStore instanceof StoreInterface) {
                     $this->repository->addStoreCondition($this->list, $this->concreteStore);
                 }
-
-                if ($this->since !== null) {
-                    $this->list->addConditionParam('o_modificationDate >= ?', $this->since->getTimestamp());
+                if($this->repository instanceof LanguageAwareRepositoryInterface && $this->language) {
+                    $this->repository->addLanguageCondition($this->list, $this->language);
+                }
+                if($this->repository instanceof LanguageAwareRepositoryInterface && $this->since !== null) {
+                    $this->list->addDateCondition($this->list, $this->since);
                 }
             } else {
                 // TODO: how to do since here?
