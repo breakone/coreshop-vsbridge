@@ -9,6 +9,7 @@ use CoreShop\Component\Resource\Repository\PimcoreRepositoryInterface;
 use CoreShop\Component\Store\Model\StoreInterface;
 use CoreShop2VueStorefrontBundle\Repository\LanguageAwareRepositoryInterface;
 use CoreShop2VueStorefrontBundle\Repository\StoreAwareRepositoryInterface;
+use CoreShop2VueStorefrontBundle\Repository\DateAwareRepositoryInterface;
 use Pimcore\Model\Listing\AbstractListing;
 
 class ElasticsearchImporter implements ImporterInterface
@@ -77,7 +78,7 @@ class ElasticsearchImporter implements ImporterInterface
                 if($this->repository instanceof LanguageAwareRepositoryInterface && $this->language) {
                     $this->repository->addLanguageCondition($this->list, $this->language);
                 }
-                if($this->repository instanceof LanguageAwareRepositoryInterface && $this->since !== null) {
+                if($this->repository instanceof DateAwareRepositoryInterface && $this->since !== null) {
                     $this->list->addDateCondition($this->list, $this->since);
                 }
             } else {
