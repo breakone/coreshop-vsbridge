@@ -38,11 +38,6 @@ class ElasticsearchImporter implements ImporterInterface
     {
         return sprintf('%1$s: %2$s (%3$s)', $this->store, $this->type, $this->language);
     }
-    
-    public function getTarget(): string
-    {
-        return $this->persister->getIndexName();
-    }
 
     public function count(): int
     {
