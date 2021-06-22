@@ -50,6 +50,14 @@ class DocumentProductMapper extends AbstractMapper implements DocumentMapperInte
         $this->documentHelper = $documentHelper;
     }
 
+    public function publishedMethods(): array
+    {
+        return [
+            'getPublished',
+            'getActive'
+        ];
+    }
+
     public function supports($object): bool
     {
         return $object instanceof ProductInterface && [] === $object->getChildren([AbstractObject::OBJECT_TYPE_VARIANT], true);

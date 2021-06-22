@@ -34,4 +34,10 @@ abstract class AbstractMapper
     {
         return Carbon::createFromTimestamp($date)->format(\DateTimeInterface::RFC3339);
     }
+
+    public function publishedMethods() : array {
+        return [
+            'getPublished'
+        ];
+    }
 }

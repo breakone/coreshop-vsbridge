@@ -14,6 +14,12 @@ interface DocumentMapperInterface
     public function supports($object): bool;
 
     /**
+     * returns an array of methods that control publishment
+     * @return array
+     */
+    public function publishedMethods() : array;
+
+    /**
      * @param AbstractObject|Data $object
      * @param StoreInterface|null $store
      * @param string|null $language

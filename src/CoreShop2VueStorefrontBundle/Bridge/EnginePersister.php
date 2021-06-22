@@ -45,7 +45,23 @@ class EnginePersister
 
         $documentMapper = $this->documentMapperFactory->factory($object);
         $esDocument = $documentMapper->mapToDocument($object, $this->store, $this->language);
-        $this->manager->persist($esDocument);
+
+        $publishedMethods = $documentMapper->publishedMethods();
+        $publish = true;
+
+        foreach($publishedMethods as $publishedMethod) {
+            if(method_exists($object, $publishedMethod) && !$object->{$publishedMethod}()) {
+                $publish = false;
+                break;
+            }
+        }
+
+        if($publish) {
+            $this->manager->persist($esDocument);
+        } else {
+            $this->manager->remove($esDocument);
+        }
+
         $this->manager->commit();
     }
 }
